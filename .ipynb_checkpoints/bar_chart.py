@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import mplcursors
+
+from ipywidgets import interact
+import ipywidgets as widgets
 
 # Load your dataset
 data = pd.read_csv('test_main.csv')
@@ -83,7 +87,8 @@ for i, (company, company_data) in enumerate(data_dict.items()):
         for k, rating in enumerate(ratings):
             counts = company_data[year][rating]
             x = x_positions[j] + k * bar_width - (bar_width * len(ratings) / 2)
-            ax.bar(x, counts, width=bar_width, label=f'Year {year}, Rating {rating}', color=rating_colors[rating])
+            bar = ax.bar(x, counts, width=bar_width, label=f'Year {year}, Rating {rating}', color=rating_colors[rating])
+            mplcursors.cursor(bar, hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Count: {int(sel.target.get_height())}"))
 
     ax.set_xlabel('Year')
     ax.set_ylabel('Count')
